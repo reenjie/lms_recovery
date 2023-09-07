@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/testemail', [App\Http\Controllers\MailController::class, 'testemail']);
 Route::get('/', function () {
     return view('welcome');
 });
