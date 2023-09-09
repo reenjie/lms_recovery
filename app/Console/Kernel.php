@@ -16,6 +16,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            // Your code to be executed here
+            // Example: Log a message
+            \Log::info('Scheduled task executed daily at ' . now());
+        })->dailyAt('20:23');
     }
 
     /**

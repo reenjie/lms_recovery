@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/testemail', [App\Http\Controllers\MailController::class, 'testemail']);
+Route::controller(App\Http\Controllers\PageController::class)->group(
+    function () {
+      Route::get('/i','forgotpassword')->name('forgotpass');
+    }
+);
+
+Route::controller(App\Http\Controllers\QueryController::class)->group(
+    function () {
+      Route::post('/me','verifyemailUsername')->name('verifyemailUsername');
+    }
+);
 Route::get('/', function () {
-    return view('welcome');
+    echo "This Page is Ok.";
 });
