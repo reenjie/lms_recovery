@@ -17,12 +17,21 @@ Route::get('/testemail', [App\Http\Controllers\MailController::class, 'testemail
 Route::controller(App\Http\Controllers\PageController::class)->group(
     function () {
       Route::get('/i','forgotpassword')->name('forgotpass');
+      Route::get('/testmail','testmail')->name('testmail');
+   
     }
+);
+
+Route::controller(App\Http\Controllers\MailController::class)->group(
+  function () {
+    Route::get('/sendotp','sendOTP')->name('mail.sendOTP');
+  }
 );
 
 Route::controller(App\Http\Controllers\QueryController::class)->group(
     function () {
       Route::post('/me','verifyemailUsername')->name('verifyemailUsername');
+      Route::post('/verify','verifyresetCode')->name('verifyresetCode');
     }
 );
 Route::get('/', function () {

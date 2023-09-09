@@ -12,41 +12,53 @@
             <div class="card-body">
                 <img style="width: 80px;float: right;" src="http://moodle.webhop.info/pluginfile.php/1/core_admin/logo/0x200/1694227863/msu-sulu.png" alt="">
              
-                <form action="return false" id="submitvalidation">
+            
                <div class="container p-5">
                 <h6 style="font-weight:normal">MSU SULU-Learning Management System</h6>
                
-                <h3>Password Recovery</h3>
                
-                <h6 style="font-weight:normal">Enter any of the following:</h6>
+             
                 <div class="alert alert-dismissible fade show d-none" id="alert" role="alert">
                   <span id="message"></span>
                     <button type="button" class="btn-close"  id="alertclose" aria-label="Close"></button>
                   </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <h5 class="textLabel" >Email</h5>
-                    </div>
-                    <div class="col-md-8">
-                        <input type="email" name="email" id="email" class="form-control form-control-lg inputs">
-                    </div>
-                    
-                    <span> OR</span>
+                 @if (session()->has('codeSend'))
+                   @include('Pages.components.codeverify')
+                     {{-- {{session()->flush()}} --}}
 
-                    <div class="col-md-4">
-                        <h5 class="textLabel">Username</h5>
-                    </div>
-                    <div class="col-md-8">
-                        <input type="text" name="username" id="username" class="form-control form-control-lg inputs">
-                    </div>
+                @elseif(session()->has('codeVerified'))
+                @include('Pages.components.codeverified')
 
-                    <div class="col-md-12">
-                      
-                    </div>
-                </div>  
-                <button class="btn btn-danger btn-lg mt-4 mb-5 " type="submit" style="float: right; font-size:17px;font-weight:bold"> SUBMIT</button>
-
-               </div> </form>
+                 @else 
+                 <form action="return false" id="submitvalidation">
+                    <h3>Password Recovery</h3>
+               
+                    <h6 style="font-weight:normal">Enter any of the following:</h6>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <h5 class="textLabel" >Email</h5>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="email" name="email" id="email" class="form-control form-control-lg inputs">
+                        </div>
+                        
+                        <span> OR</span>
+    
+                        <div class="col-md-4">
+                            <h5 class="textLabel">Username</h5>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="username" id="username" class="form-control form-control-lg inputs">
+                        </div>
+    
+                        <div class="col-md-12">
+                          
+                        </div>
+                    </div>  
+                    <button class="btn btn-danger btn-lg mt-4 mb-5 " id="btnsubmit" type="submit" style="float: right; font-size:17px;font-weight:bold"> SUBMIT</button>
+                </form>
+                 @endif
+               </div>
             </div>
         </div>
     </div>
@@ -65,6 +77,8 @@
             return;
         }
 
+        $('#btnsubmit').html('Submitting <div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div>').attr('disabled',true);
+
         $.ajax({
         url:"{{route('verifyemailUsername')}}",
         method: 'POST',
@@ -74,7 +88,25 @@
             _token:"{{csrf_token()}}"
         },
         success: function (data) {
-         alert(data);
+            if(data.message == 'nodata'){
+            $('#alert').removeClass('d-none').addClass('alert-danger');
+            $('#message').text("We could not find your account.");
+            $('.inputs').val('').removeAttr('disabled');
+
+            }
+
+            if(data.message == 'errorsending'){
+                $('#alert').removeClass('d-none').addClass('alert-danger');
+            $('#message').text("There was a problem with the server.");
+            $('.inputs').val('').removeAttr('disabled');
+            $('#btnsubmit').html('Submit').removeAttr('disabled');
+
+
+            }
+
+            if(data.message == 'success'){
+               location.reload();
+            }
         },
         error: function (xhr, status, error) {
             // Handle errors
