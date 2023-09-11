@@ -179,6 +179,7 @@ class mailcontroller extends Controller
             if ($mail->send()) {
               
                 session(['codeSend' => 1]);
+                session(['resetemail'=> $email]);
                 return response()->json(['message'=>'success']);
             } else {
                 return response()->json(['message'=>'errorsending']);

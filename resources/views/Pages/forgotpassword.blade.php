@@ -22,6 +22,13 @@
                   <span id="message"></span>
                     <button type="button" class="btn-close"  id="alertclose" aria-label="Close"></button>
                   </div>
+                  @if(session()->has('success'))
+                  <div class="alert alert-dismissible alert-success fade show " id="alert" role="alert">
+                    <span id="message">{{session()->get('success')}}</span>
+                      <button type="button" class="btn-close"  data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {{-- {{session()->forget('changesuccessful')}} --}}
+                  @endif
                  @if (session()->has('codeSend'))
                    @include('Pages.components.codeverify')
                      {{-- {{session()->flush()}} --}}
@@ -74,6 +81,7 @@
             $('#alert').removeClass('d-none').addClass('alert-danger');
             $('#message').text('PLEASE ENTER ANY OF THE FOLLOWING');
             $('.inputs').addClass('is-invalid');
+            $('#btnsubmit').html('Submit').removeAttr('disabled');
             return;
         }
 
@@ -92,6 +100,7 @@
             $('#alert').removeClass('d-none').addClass('alert-danger');
             $('#message').text("We could not find your account.");
             $('.inputs').val('').removeAttr('disabled');
+            $('#btnsubmit').html('Submit').removeAttr('disabled');
 
             }
 

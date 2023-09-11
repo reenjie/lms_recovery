@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class QueryController extends Controller
 {
@@ -41,5 +42,20 @@ class QueryController extends Controller
           }
 
           return response()->json(['message'=>'doesnotmatch']);
+    }
+
+    public function changepass(Request $request){
+        $newpass = $request->newpass;
+        $email = session()->get('resetemail');
+        
+
+        User::where('email',$email)->update([
+            'password'=>Hash::make($newpass)
+        ]);
+
+        session()->forget('codeVerified');
+      
+        return redirect()->back()->with('success','Password has changed Successfully!');
+        
     }
 }

@@ -32,6 +32,7 @@ Route::controller(App\Http\Controllers\QueryController::class)->group(
     function () {
       Route::post('/me','verifyemailUsername')->name('verifyemailUsername');
       Route::post('/verify','verifyresetCode')->name('verifyresetCode');
+      Route::post('/changepass','changepass')->name('changepass');
     }
 );
 Route::get('/', function () {
